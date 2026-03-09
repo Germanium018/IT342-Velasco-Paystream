@@ -1,6 +1,6 @@
 package edu.cit.velasco.paystream.controller;
 
-import edu.cit.velasco.paystream.model.User;
+import edu.cit.velasco.paystream.entity.User;
 import edu.cit.velasco.paystream.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

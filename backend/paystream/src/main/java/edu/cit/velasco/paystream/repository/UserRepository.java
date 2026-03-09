@@ -1,6 +1,6 @@
 package edu.cit.velasco.paystream.repository;
 
-import edu.cit.velasco.paystream.model.User;
+import edu.cit.velasco.paystream.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

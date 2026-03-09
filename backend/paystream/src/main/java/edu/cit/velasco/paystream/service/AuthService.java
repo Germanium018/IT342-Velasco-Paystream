@@ -1,6 +1,6 @@
 package edu.cit.velasco.paystream.service;
 
-import edu.cit.velasco.paystream.model.User;
+import edu.cit.velasco.paystream.entity.User;
 import edu.cit.velasco.paystream.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

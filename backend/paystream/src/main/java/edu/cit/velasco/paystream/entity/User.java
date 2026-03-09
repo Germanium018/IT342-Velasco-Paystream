@@ -1,4 +1,4 @@
-package edu.cit.velasco.paystream.model;
+package edu.cit.velasco.paystream.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
