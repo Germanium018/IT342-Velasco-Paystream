@@ -1,10 +1,10 @@
+/* --- AUTHENTICATION STYLES (Existing) --- */
 .auth-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Header */
 .auth-header {
   padding: 24px 40px;
   display: flex;
@@ -26,7 +26,6 @@
   font-size: 0.875rem;
 }
 
-/* Card Content */
 .auth-content {
   flex: 1;
   display: flex;
@@ -58,7 +57,6 @@
   font-size: 0.95rem;
 }
 
-/* Form Elements */
 .form-group {
   text-align: left;
   margin-bottom: 20px;
@@ -96,28 +94,25 @@
   z-index: 1;
 }
 
-/* Unified Input & Select Styles */
 .form-group input,
 .form-group select {
   width: 100%;
   height: 44px;
-  padding: 0 16px; /* Base padding */
+  padding: 0 16px;
   border: 1px solid var(--border-gray);
   border-radius: 8px;
   font-size: 0.95rem;
   background-color: var(--surface-white);
   color: var(--text-main);
   outline: none;
-  appearance: none; /* Removes default browser dropdown arrow */
+  appearance: none;
   transition: border 0.2s ease;
 }
 
-/* Specific padding for inputs with left icons (User, Mail, Lock) */
 .input-wrapper input {
   padding-left: 40px;
 }
 
-/* Remove extra left padding for the select since it has no left icon */
 .input-wrapper select {
   padding-left: 16px;
 }
@@ -127,7 +122,6 @@
   border: 2px solid var(--secondary-action);
 }
 
-/* Checkbox */
 .remember-me {
   display: flex;
   align-items: center;
@@ -137,7 +131,6 @@
   color: var(--text-main);
 }
 
-/* Buttons */
 .btn-primary {
   width: 100%;
   height: 48px;
@@ -151,6 +144,7 @@
   align-items: center;
   gap: 8px;
   font-size: 1rem;
+  cursor: pointer;
 }
 
 .btn-primary:hover {
@@ -189,7 +183,6 @@
   color: var(--text-muted);
 }
 
-/* Footer */
 .main-footer {
   padding: 24px;
   text-align: center;
@@ -197,9 +190,241 @@
   color: var(--text-muted);
 }
 
-.footer-links {
+/* --- DASHBOARD & TABLE STYLES --- */
+.dashboard-container {
+  min-height: 100vh;
+  background-color: var(--background-off-white);
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.action-header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
   gap: 20px;
-  margin-top: 8px;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.table-container {
+  background: var(--surface-white);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th {
+  background-color: var(--primary-brand);
+  color: white;
+  padding: 16px 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.data-table td {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-gray);
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.data-table tr:hover {
+  background-color: #f8fafc;
+}
+
+.employee-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: #f1f5f9;
+  color: var(--secondary-action);
+}
+
+/* --- MODAL STYLES --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: var(--surface-white);
+  padding: 32px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+  flex: 1;
+  height: 48px;
+  background-color: white;
+  color: var(--text-main);
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* --- PAYROLL PROCESSING STYLES (New) --- */
+.payroll-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px; /* Split view: Left form, Right preview */
+  gap: 32px;
+  align-items: start;
+}
+
+.step-card {
+  background: var(--surface-white);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-gray);
+  margin-bottom: 24px;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: var(--primary-brand);
+}
+
+.step-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.grid-2-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Sidebar Calculation Preview */
+.preview-card {
+  background: var(--primary-brand); /* Deep Navy */
+  color: white;
+  padding: 32px;
+  border-radius: 12px;
+  position: sticky;
+  top: 40px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.preview-card h3 {
+  color: white;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.preview-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: #94a3b8; /* Muted text in dark theme */
+}
+
+.preview-row span:last-child {
+  font-family: 'JetBrains Mono', monospace;
+  color: white;
+}
+
+/* Highlighted Calculation Totals */
+.preview-row.main {
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  border-top: 1px solid #334155;
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+.total-salary-box {
+  background: #334155;
+  padding: 24px;
+  border-radius: 8px;
+  margin-top: 24px;
+  text-align: center;
+  border: 1px solid #475569;
+}
+
+.total-amount {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  display: block;
+  color: white;
+  margin-top: 4px;
+}
+
+.verify-badge {
+  color: var(--success-emerald);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.process-btn {
+  background-color: var(--success-emerald);
+  margin-top: 24px;
+  width: 100%;
+}
+
+.process-btn:hover {
+  background-color: #059669;
 }

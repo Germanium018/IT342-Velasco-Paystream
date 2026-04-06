@@ -22,5 +22,8 @@ public class User {
     private String lastname;
     private String role; // "ROLE_ADMIN" or "ROLE_EMPLOYEE"
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Employee employee;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 }
