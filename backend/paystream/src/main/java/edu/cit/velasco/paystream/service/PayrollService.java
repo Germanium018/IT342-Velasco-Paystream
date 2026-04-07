@@ -6,10 +6,12 @@ import edu.cit.velasco.paystream.entity.PayrollTransaction;
 import edu.cit.velasco.paystream.repository.EmployeeRepository;
 import edu.cit.velasco.paystream.repository.PayRatesRepository;
 import edu.cit.velasco.paystream.repository.PayrollTransactionRepository;
+import edu.cit.velasco.paystream.strategy.PayrollCalculationStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +21,10 @@ public class PayrollService {
     private final PayRatesRepository payRatesRepository;
     private final PayrollTransactionRepository payrollRepository;
 
+    // This Map automatically holds your strategies! 
+    // Key = The name in @Component ("DRIVER_STRATEGY", "HELPER_STRATEGY")
+    private final Map<String, PayrollCalculationStrategy> strategies;
+
     public PayrollTransaction processPayroll(PayrollTransaction request) {
         // 1. Fetch Employee and their specific Position Rates
         Employee emp = employeeRepository.findById(request.getEmployee().getId())
@@ -27,44 +33,22 @@ public class PayrollService {
         PayRates rates = payRatesRepository.findById(emp.getPosition())
                 .orElseThrow(() -> new RuntimeException("Rates not set for position: " + emp.getPosition()));
 
-        // --- GROSS PAY CALCULATION ---
-        // (Working Days * Base Salary)
-        BigDecimal basicPay = request.getWorkingDays().multiply(emp.getBaseSalary());
+        // 2. Select the correct Strategy based on the Employee's Position
+        // If the position is "Driver", it looks for "DRIVER_STRATEGY"
+        String strategyKey = emp.getPosition().toUpperCase() + "_STRATEGY";
         
-        // (40ft count * 40ft rate)
-        BigDecimal pay40ft = request.getCount40ft().multiply(rates.getRate40ft());
+        PayrollCalculationStrategy strategy = strategies.get(strategyKey);
         
-        // (20ft count * 20ft rate)
-        BigDecimal pay20ft = request.getCount20ft().multiply(rates.getRate20ft());
-        
-        // (OT hours * OT rate)
-        BigDecimal payOtHours = request.getOvertimeHours().multiply(rates.getRateOtHour());
-        
-        // (OT container count * OT container rate)
-        BigDecimal payOtContainers = request.getOtContainerCount().multiply(rates.getRateOtContainer());
+        if (strategy == null) {
+            throw new RuntimeException("No payroll strategy found for position: " + emp.getPosition());
+        }
 
-        BigDecimal grossPay = basicPay
-                .add(pay40ft)
-                .add(pay20ft)
-                .add(payOtHours)
-                .add(payOtContainers)
-                .add(request.getOutOfTownTrips());
-
-        // --- DEDUCTIONS CALCULATION ---
-        // Absence Deduction: (Absence Days * Daily Rate)
-        BigDecimal absenceDeduction = request.getAbsences().multiply(emp.getBaseSalary());
-
-        BigDecimal totalDeductions = request.getSssDeduction()
-                .add(request.getPhilhealthDeduction())
-                .add(request.getPagibigDeduction())
-                .add(absenceDeduction)
-                .add(request.getCashAdvance())
-                .add(request.getOtherDebts());
-
-        // --- NET PAY ---
+        // 3. Delegate the math to the Strategy
+        BigDecimal grossPay = strategy.calculateGrossPay(request, emp, rates);
+        BigDecimal totalDeductions = strategy.calculateTotalDeductions(request, emp);
         BigDecimal netPay = grossPay.subtract(totalDeductions);
 
-        // 2. Finalize Transaction Data
+        // 4. Finalize Transaction Data
         request.setEmployee(emp);
         request.setNetPay(netPay);
         request.setTransactionStatus("PAID");

@@ -1,13 +1,19 @@
 package edu.cit.velasco.paystream.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payroll_transactions")
 @Data
+@Builder             // <--- THE PATTERN: Generates the Builder API
+@NoArgsConstructor   // <--- Required by JPA/Hibernate
+@AllArgsConstructor  // <--- Required by Lombok's @Builder
 public class PayrollTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,11 +66,13 @@ public class PayrollTransaction {
     @Column(name = "net_pay", precision = 15, scale = 2)
     private BigDecimal netPay;
 
+    @Builder.Default // Ensures "CASH" remains the default even when using a builder
     @Column(name = "payment_mode")
     private String paymentMode = "CASH";
 
     @Column(name = "transaction_status")
     private String transactionStatus; // "PENDING", "PAID"
 
+    @Builder.Default // Ensures current time is used by default
     private LocalDateTime processedAt = LocalDateTime.now();
 }

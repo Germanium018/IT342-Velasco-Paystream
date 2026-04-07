@@ -22,6 +22,16 @@ public class JwtUtils {
 
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
+    /**
+     * SINGLETON PATTERN IMPLEMENTATION:
+     * Spring manages this as a Singleton by default. 
+     * We keep the constructor available for Spring's internal reflection 
+     * but logically restrict manual instantiation.
+     */
+    public JwtUtils() {
+        // Logically, this constructor is only called once by the Spring Context
+    }
+
     // 1. Generate Token for User
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
