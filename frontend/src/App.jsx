@@ -3,6 +3,8 @@ import Login from './pages/Login';
 import Register from './pages/Register'; 
 import AdminDashboard from './pages/AdminDashboard';
 import PayrollProcessing from './pages/PayrollProcessing';
+import Rates from './pages/Rates'; // Ensure you have created this page
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 import './index.css';
 
@@ -10,21 +12,55 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* 1. Redirect empty path to login */}
+        {/* --- PUBLIC ROUTES --- */}
+        {/* Root redirect to login */}
         <Route path="/" element={<Navigate to="/login" />} />
         
-        {/* 2. Authentication Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-        {/* 3. Dashboard Routes (Mapped both to be safe) */}
-        <Route path="/dashboard" element={<AdminDashboard />} />
-        <Route path="/employee-dashboard" element={<AdminDashboard />} />
+        {/* --- PROTECTED ADMIN ROUTES --- 
+            Wraps the Admin features in a security gate that only allows 'ROLE_ADMIN'
+        */}
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute allowedRoles={['ROLE_ADMIN']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/employee-dashboard" 
+          element={
+            <ProtectedRoute allowedRoles={['ROLE_ADMIN']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/payroll" 
+          element={
+            <ProtectedRoute allowedRoles={['ROLE_ADMIN']}>
+              <PayrollProcessing />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/rates" 
+          element={
+            <ProtectedRoute allowedRoles={['ROLE_ADMIN']}>
+              <Rates />
+            </ProtectedRoute>
+          } 
+        />
         
-        {/* 4. Payroll Processing Route */}
-        <Route path="/payroll" element={<PayrollProcessing />} />
-        
-        {/* 5. Catch-all: If a URL doesn't exist, send them back to login */}
+        {/* --- CATCH-ALL REDIRECT --- 
+            Prevents "White Screens" by sending invalid URLs back to Login
+        */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

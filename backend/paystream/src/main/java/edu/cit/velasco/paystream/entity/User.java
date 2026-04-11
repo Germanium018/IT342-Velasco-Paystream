@@ -3,6 +3,8 @@ package edu.cit.velasco.paystream.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "users")
@@ -15,6 +17,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
@@ -23,6 +26,12 @@ public class User {
     private String role; // "ROLE_ADMIN" or "ROLE_EMPLOYEE"
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    /**
+     * BREAK THE LOOP:
+     * Prevents the nested Employee object from trying to 
+     * re-serialize the "user" parent field.
+     */
+    @JsonIgnoreProperties("user")
     private Employee employee;
 
     private LocalDateTime createdAt = LocalDateTime.now();

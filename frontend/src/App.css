@@ -428,3 +428,22 @@
 .process-btn:hover {
   background-color: #059669;
 }
+
+/* Remove up/down arrows (spinners) in Chrome, Safari, Edge, and Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Remove up/down arrows (spinners) in Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Optional: Make the inputs look more clickable */
+input[type=number]:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}

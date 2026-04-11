@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Added for backend communication
-import { useNavigate } from 'react-router-dom'; // Added for redirection
+import axios from 'axios'; 
+import { useNavigate, Link } from 'react-router-dom'; // Added Link for better routing
 import { Mail, Lock, Eye, EyeOff, ArrowRight, LayoutDashboard } from 'lucide-react';
 import '../App.css';
 
@@ -8,26 +8,31 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate(); // Initialize navigation
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     
     try {
-      // Sending credentials to the backend
       const response = await axios.post('http://localhost:8080/api/v1/auth/login', {
         email: email,
         password: password
       });
 
       if (response.data.success) {
-        // Store user data (like role) in localStorage for session management
+        // --- STEP 1 FIX: SAVING ALL AUTH DATA ---
+        // 1. Store the JWT Token (needed for authorized API calls)
+        localStorage.setItem('token', response.data.token);
+        
+        // 2. Store the role separately (needed for Step 2: Role Access)
+        localStorage.setItem('role', response.data.role);
+        
+        // 3. Store the user profile data (without the password)
         localStorage.setItem('user', JSON.stringify(response.data.user));
         
-        // Role-based redirection logic
-        const role = response.data.user.role;
-        if (role === 'ROLE_ADMIN') {
-          navigate('/admin-dashboard');
+        // Role-based redirection logic matching your App.jsx routes
+        if (response.data.role === 'ROLE_ADMIN') {
+          navigate('/dashboard');
         } else {
           navigate('/employee-dashboard');
         }
@@ -110,7 +115,7 @@ const Login = () => {
           </button>
 
           <div className="register-footer">
-            New to PayStream? <a href="/register">Create an account</a>
+            New to PayStream? <Link to="/register">Create an account</Link>
           </div>
         </div>
       </main>

@@ -11,6 +11,10 @@ public class PayRates {
     @Id
     private String position; // "DRIVER" or "HELPER"
 
+    // Container & OT Rates
+    @Column(name = "base_rate", precision = 15, scale = 2)
+    private BigDecimal baseRate;
+
     @Column(name = "rate_40ft", precision = 15, scale = 2)
     private BigDecimal rate40ft;
 
@@ -22,4 +26,14 @@ public class PayRates {
 
     @Column(name = "rate_ot_hour", precision = 15, scale = 2)
     private BigDecimal rateOtHour;
+
+    // Statutory Rates (New Fields)
+    @Column(name = "rate_sss", precision = 15, scale = 2)
+    private BigDecimal rateSss;
+
+    @Column(name = "rate_philhealth", precision = 15, scale = 2)
+    private BigDecimal ratePhilhealth;
+
+    @Column(name = "rate_pagibig", precision = 15, scale = 2)
+    private BigDecimal ratePagibig;
 }
