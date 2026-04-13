@@ -22,9 +22,21 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
+        /**
+         * FIX: Spring Security's internal User constructor (org.springframework.security.core.userdetails.User)
+         * strictly forbids null or empty password strings. 
+         * * Since users logging in via GitHub do not have a password_hash in our database, 
+         * we provide a dummy placeholder string here. This satisfies the constructor 
+         * and allows the JWT generation process to proceed.
+         */
+        String passwordForSpring = user.getPasswordHash();
+        if (passwordForSpring == null) {
+            passwordForSpring = "OAUTH2_USER"; 
+        }
+
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
-                user.getPasswordHash(),
+                passwordForSpring,
                 Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
         );
     }

@@ -447,3 +447,26 @@ input[type=number]:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
 }
+
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;           /* This makes it the same width as btn-primary */
+  padding: 12px;         /* Match this to your btn-primary padding */
+  border-radius: 8px;    /* Match this to your btn-primary radius */
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #e2e8f0; /* Standard border */
+  margin-top: 12px;
+  gap: 10px;             /* Space between icon and text */
+}
+
+/* Hover effect to make it feel interactive */
+.btn-google:hover {
+  background-color: #1a1f24 !important; /* Slightly darker on hover */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}

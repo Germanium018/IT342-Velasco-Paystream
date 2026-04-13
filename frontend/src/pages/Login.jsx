@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; 
-import { useNavigate, Link } from 'react-router-dom'; // Added Link for better routing
-import { Mail, Lock, Eye, EyeOff, ArrowRight, LayoutDashboard } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, LayoutDashboard, Github } from 'lucide-react';
 import '../App.css';
 
 const Login = () => {
@@ -12,7 +12,6 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
     try {
       const response = await axios.post('http://localhost:8080/api/v1/auth/login', {
         email: email,
@@ -20,17 +19,10 @@ const Login = () => {
       });
 
       if (response.data.success) {
-        // --- STEP 1 FIX: SAVING ALL AUTH DATA ---
-        // 1. Store the JWT Token (needed for authorized API calls)
         localStorage.setItem('token', response.data.token);
-        
-        // 2. Store the role separately (needed for Step 2: Role Access)
         localStorage.setItem('role', response.data.role);
-        
-        // 3. Store the user profile data (without the password)
         localStorage.setItem('user', JSON.stringify(response.data.user));
         
-        // Role-based redirection logic matching your App.jsx routes
         if (response.data.role === 'ROLE_ADMIN') {
           navigate('/dashboard');
         } else {
@@ -41,6 +33,12 @@ const Login = () => {
       console.error("Login Error:", error);
       alert('Login Failed: ' + (error.response?.data?.message || "Invalid Email or Password"));
     }
+  };
+
+  // Logic to trigger GitHub OAuth Flow
+  const handleGithubLogin = () => {
+    // This redirects the entire browser to the Spring Boot OAuth2 entry point
+    window.location.href = 'http://localhost:8080/oauth2/authorization/github';
   };
 
   return (
@@ -95,11 +93,6 @@ const Login = () => {
               </div>
             </div>
 
-            <div className="remember-me">
-              <input type="checkbox" id="remember" />
-              <label htmlFor="remember">Remember this device</label>
-            </div>
-
             <button type="submit" className="btn-primary">
               Sign In <ArrowRight size={18} />
             </button>
@@ -109,9 +102,15 @@ const Login = () => {
             <span>Or continue with</span>
           </div>
 
-          <button className="btn-google" type="button">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" alt="Google" width="18" />
-            Google
+          {/* UPDATED GITHUB BUTTON */}
+          <button 
+            className="btn-google" 
+            type="button" 
+            onClick={handleGithubLogin}
+            style={{ backgroundColor: '#24292F', color: 'white', border: 'none' }}
+          >
+            <Github size={20} />
+            <span>Sign in with GitHub</span>
           </button>
 
           <div className="register-footer">
@@ -125,11 +124,7 @@ const Login = () => {
         <div className="footer-links">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
-          <a href="#">Cookies</a>
         </div>
-        <p style={{ marginTop: '12px', fontSize: '10px', opacity: 0.6 }}>
-          🔒 End-to-end encrypted connection
-        </p>
       </footer>
     </div>
   );

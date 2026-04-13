@@ -1,6 +1,7 @@
 package edu.cit.velasco.paystream.config;
 
 import edu.cit.velasco.paystream.security.JwtRequestFilter;
+import edu.cit.velasco.paystream.security.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,8 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
+    // 1. Inject the custom Success Handler we just built
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -36,13 +39,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Enable CORS using the bean defined below
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/login/**", "/oauth2/**").permitAll()
                 .anyRequest().authenticated()
+            )
+            // 2. Configure OAuth2 to use our Success Handler logic
+            .oauth2Login(oauth2 -> oauth2
+                .successHandler(oAuth2AuthenticationSuccessHandler)
             );
 
         // Add our JWT filter before the standard auth filter
@@ -51,7 +58,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 2. Define the global CORS configuration
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -59,7 +65,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
         // Allow all standard HTTP methods
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        // Allow necessary headers (Authorization is required for JWT)
+        // Allow necessary headers
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cache-Control"));
         configuration.setAllowCredentials(true);
         

@@ -18,19 +18,18 @@ public class User {
     private String email;
 
     @JsonIgnore
-    @Column(name = "password_hash", nullable = false)
+    // Made nullable=true because GitHub users won't have a local password
+    @Column(name = "password_hash", nullable = true) 
     private String passwordHash;
 
     private String firstname;
     private String lastname;
     private String role; // "ROLE_ADMIN" or "ROLE_EMPLOYEE"
+    
+    // Track where the user came from
+    private String provider; // "LOCAL" or "GITHUB"
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    /**
-     * BREAK THE LOOP:
-     * Prevents the nested Employee object from trying to 
-     * re-serialize the "user" parent field.
-     */
     @JsonIgnoreProperties("user")
     private Employee employee;
 
