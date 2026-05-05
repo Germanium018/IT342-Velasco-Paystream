@@ -3,8 +3,9 @@ import Login from './pages/Login';
 import Register from './pages/Register'; 
 import AdminDashboard from './pages/AdminDashboard';
 import PayrollProcessing from './pages/PayrollProcessing';
+import Payslips from './pages/Payslips'; // NEW IMPORT
 import Rates from './pages/Rates';
-import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler'; // NEW IMPORT
+import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 import './index.css';
@@ -17,7 +18,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-        {/* NEW ROUTE: This handles the token coming back from the backend */}
         <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
         
         <Route 
@@ -43,6 +43,16 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['ROLE_ADMIN']}>
               <PayrollProcessing />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* NEW ROUTE FOR PAYSLIP HISTORY */}
+        <Route 
+          path="/payslips" 
+          element={
+            <ProtectedRoute allowedRoles={['ROLE_ADMIN']}>
+              <Payslips />
             </ProtectedRoute>
           } 
         />

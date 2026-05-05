@@ -8,6 +8,7 @@ import edu.cit.velasco.paystream.repository.PayRatesRepository;
 import edu.cit.velasco.paystream.repository.PayrollTransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -19,41 +20,30 @@ public class PayrollService {
     private final PayRatesRepository payRatesRepository;
     private final PayrollTransactionRepository payrollRepository;
 
+    /**
+     * Processes a payroll transaction, calculates net pay, 
+     * and updates the employee's outstanding debt balance.
+     */
+    @Transactional
     public PayrollTransaction processPayroll(PayrollTransaction request) {
-        // 1. Fetch Employee and their specific Position Rates
+        // 1. Fetch Employee
         Employee emp = employeeRepository.findById(request.getEmployee().getId())
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
         
         PayRates rates = payRatesRepository.findById(emp.getPosition())
                 .orElseThrow(() -> new RuntimeException("Rates not set for position: " + emp.getPosition()));
 
-        // --- GROSS PAY CALCULATION ---
-        // (Working Days * Base Salary)
-        BigDecimal basicPay = request.getWorkingDays().multiply(emp.getBaseSalary());
-        
-        // (40ft count * 40ft rate)
+        // --- CALCULATION LOGIC ---
+        BigDecimal basicPay = request.getWorkingDays().multiply(rates.getBaseRate());
         BigDecimal pay40ft = request.getCount40ft().multiply(rates.getRate40ft());
-        
-        // (20ft count * 20ft rate)
         BigDecimal pay20ft = request.getCount20ft().multiply(rates.getRate20ft());
-        
-        // (OT hours * OT rate)
         BigDecimal payOtHours = request.getOvertimeHours().multiply(rates.getRateOtHour());
-        
-        // (OT container count * OT container rate)
         BigDecimal payOtContainers = request.getOtContainerCount().multiply(rates.getRateOtContainer());
 
-        BigDecimal grossPay = basicPay
-                .add(pay40ft)
-                .add(pay20ft)
-                .add(payOtHours)
-                .add(payOtContainers)
-                .add(request.getOutOfTownTrips());
+        BigDecimal grossPay = basicPay.add(pay40ft).add(pay20ft).add(payOtHours)
+                .add(payOtContainers).add(request.getOutOfTownTrips());
 
-        // --- DEDUCTIONS CALCULATION ---
-        // Absence Deduction: (Absence Days * Daily Rate)
-        BigDecimal absenceDeduction = request.getAbsences().multiply(emp.getBaseSalary());
-
+        BigDecimal absenceDeduction = request.getAbsences().multiply(rates.getBaseRate());
         BigDecimal totalDeductions = request.getSssDeduction()
                 .add(request.getPhilhealthDeduction())
                 .add(request.getPagibigDeduction())
@@ -61,8 +51,14 @@ public class PayrollService {
                 .add(request.getCashAdvance())
                 .add(request.getOtherDebts());
 
-        // --- NET PAY ---
         BigDecimal netPay = grossPay.subtract(totalDeductions);
+
+        // --- DEBT UPDATE LOGIC ---
+        if (emp.getDebt() != null && request.getOtherDebts().compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal remainingDebt = emp.getDebt().subtract(request.getOtherDebts());
+            emp.setDebt(remainingDebt);
+            employeeRepository.save(emp); 
+        }
 
         // 2. Finalize Transaction Data
         request.setEmployee(emp);
@@ -72,7 +68,18 @@ public class PayrollService {
         return payrollRepository.save(request);
     }
 
+    /**
+     * Fetches all payroll transactions for a specific employee.
+     */
     public List<PayrollTransaction> getEmployeeHistory(Long employeeId) {
         return payrollRepository.findByEmployeeId(employeeId);
+    }
+
+    /**
+     * NEW: Fetches the master list of all payroll transactions for all employees,
+     * sorted so the most recent payslips appear at the top.
+     */
+    public List<PayrollTransaction> getAllTransactions() {
+        return payrollRepository.findAllByOrderByProcessedAtDesc();
     }
 }

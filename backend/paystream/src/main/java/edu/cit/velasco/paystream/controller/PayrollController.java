@@ -31,8 +31,18 @@ public class PayrollController {
         }
     }
 
+    // Existing: Get history for a specific employee
     @GetMapping("/history/{employeeId}")
     public ResponseEntity<List<PayrollTransaction>> getHistory(@PathVariable Long employeeId) {
         return ResponseEntity.ok(payrollService.getEmployeeHistory(employeeId));
+    }
+
+    /**
+     * STEP 1 FIX: New Endpoint for Phase 2
+     * Fetches all transactions for all employees, sorted by latest first.
+     */
+    @GetMapping("/all")
+    public ResponseEntity<List<PayrollTransaction>> getAllHistory() {
+        return ResponseEntity.ok(payrollService.getAllTransactions());
     }
 }

@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface PayrollTransactionRepository extends JpaRepository<PayrollTransaction, Long> {
     List<PayrollTransaction> findByEmployeeId(Long employeeId);
+    
+    // NEW: Fetch all records sorted by date (newest first)
+    List<PayrollTransaction> findAllByOrderByProcessedAtDesc();
 }

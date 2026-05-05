@@ -46,3 +46,22 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+/* Payslip Table Specifics */
+.data-table td .employee-id {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.btn-icon:hover {
+  background-color: #f1f5f9;
+  border-radius: 6px;
+}
+
+.dashboard-container .loader-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}

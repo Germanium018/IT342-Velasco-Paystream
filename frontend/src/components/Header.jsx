@@ -1,19 +1,17 @@
-import { LayoutDashboard, Banknote, Zap, Bell, Settings, LogOut, User } from 'lucide-react';
+import { LayoutDashboard, Banknote, Zap, Bell, Settings, LogOut, User, History } from 'lucide-react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Used to highlight the active tab
+  const location = useLocation();
 
   const handleLogout = () => {
-    // SECURITY: Clear all three keys to prevent unauthorized session persistence
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('role');
     navigate('/login');
   };
 
-  // Helper to determine if a link is active based on the URL
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -26,9 +24,7 @@ const Header = () => {
             to="/dashboard" 
             style={{ 
               color: isActive('/dashboard') ? 'white' : '#94a3b8', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px', 
+              display: 'flex', alignItems: 'center', gap: '8px', 
               fontWeight: isActive('/dashboard') ? 600 : 400 
             }}
           >
@@ -39,22 +35,30 @@ const Header = () => {
             to="/payroll" 
             style={{ 
               color: isActive('/payroll') ? 'white' : '#94a3b8', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px',
+              display: 'flex', alignItems: 'center', gap: '8px',
               fontWeight: isActive('/payroll') ? 600 : 400 
             }}
           >
             <Banknote size={20} /> Payroll
           </Link>
 
+          {/* NEW LINK TO PAYSLIPS */}
+          <Link 
+            to="/payslips" 
+            style={{ 
+              color: isActive('/payslips') ? 'white' : '#94a3b8', 
+              display: 'flex', alignItems: 'center', gap: '8px',
+              fontWeight: isActive('/payslips') ? 600 : 400 
+            }}
+          >
+            <History size={20} /> Payslips
+          </Link>
+
           <Link 
             to="/rates" 
             style={{ 
               color: isActive('/rates') ? 'white' : '#94a3b8', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '8px',
+              display: 'flex', alignItems: 'center', gap: '8px',
               fontWeight: isActive('/rates') ? 600 : 400 
             }}
           >
@@ -68,28 +72,16 @@ const Header = () => {
         <Settings size={20} style={{ cursor: 'pointer', color: '#94a3b8' }} title="Settings" />
         
         <div style={{ 
-          width: '36px', 
-          height: '36px', 
-          borderRadius: '50%', 
-          backgroundColor: '#3b82f6', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center' 
+          width: '36px', height: '36px', borderRadius: '50%', 
+          backgroundColor: '#3b82f6', display: 'flex', 
+          alignItems: 'center', justifyContent: 'center' 
         }}>
           <User size={20} />
         </div>
 
         <button 
           onClick={handleLogout} 
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            padding: 0, 
-            cursor: 'pointer', 
-            display: 'flex', 
-            alignItems: 'center', 
-            color: '#ef4444' 
-          }}
+          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', color: '#ef4444' }}
           title="Logout"
         >
           <LogOut size={22} />

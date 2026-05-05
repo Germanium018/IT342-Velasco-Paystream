@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+//import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/employees")
@@ -29,7 +29,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeRepository.save(employee));
     }
 
-    // Update base salary or position
+    // Update base salary, position, status, and debt
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEmployee(@PathVariable Long id, @RequestBody Employee details) {
         Employee emp = employeeRepository.findById(id)
@@ -38,6 +38,9 @@ public class EmployeeController {
         emp.setBaseSalary(details.getBaseSalary());
         emp.setPosition(details.getPosition());
         emp.setStatus(details.getStatus());
+        
+        // THIS IS THE NEW LINE: Allow the backend to save the debt to the database
+        emp.setDebt(details.getDebt()); 
         
         return ResponseEntity.ok(employeeRepository.save(emp));
     }
