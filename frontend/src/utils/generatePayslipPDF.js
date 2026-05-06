@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-export const generatePayslipPDF = (t, allRates) => {
+export const generatePayslipPDF = (t, allRates, mode = 'download') => {
   try {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -32,13 +32,13 @@ export const generatePayslipPDF = (t, allRates) => {
     // 3. EARNINGS (Hide if 0)
     const earnings = [];
     
-    // TWEAK: We use rates.baseRate (Daily Rate) instead of baseSalary (Monthly Salary)
+    // Using rates.baseRate (Daily Rate) instead of baseSalary (Monthly Salary)
     const dailyRate = num(rates.baseRate); 
 
     const addEarning = (label, count, rate) => {
       const total = num(count) * num(rate);
       if (total > 0) {
-        // TWEAK: Using "Php" to avoid the encoding error symbol
+        // Using "Php" to avoid encoding errors
         earnings.push([`${label} (${num(count)} x Php ${num(rate).toLocaleString()})`, `Php ${total.toLocaleString()}`]);
       }
     };
@@ -86,7 +86,6 @@ export const generatePayslipPDF = (t, allRates) => {
     doc.setDrawColor(226, 232, 240);
     doc.line(14, currentY - 8, pageWidth - 14, currentY - 8);
 
-    // TWEAK: Reduced font size from 16 to 13 to make it smaller and fit better
     doc.setFontSize(13); 
     doc.setFont("helvetica", "bold");
     doc.setTextColor(30, 41, 59);
@@ -99,9 +98,7 @@ export const generatePayslipPDF = (t, allRates) => {
     doc.setFont("helvetica", "normal");
     doc.setTextColor(100, 116, 139);
 
-    // TWEAK: Aligned signature layout
     doc.text("Prepared by:", 14, sigY);
-    // Align "Received by" text to the right side currency column
     doc.text("Received by:", pageWidth - 70, sigY);
 
     doc.setFont("helvetica", "bold");
@@ -110,12 +107,19 @@ export const generatePayslipPDF = (t, allRates) => {
     doc.text(`${t.employee?.user?.firstname} ${t.employee?.user?.lastname}`, pageWidth - 70, sigY + 15);
 
     doc.setDrawColor(148, 163, 184);
-    doc.line(14, sigY + 17, 70, sigY + 17); // Admin line
-    doc.line(pageWidth - 70, sigY + 17, pageWidth - 14, sigY + 17); // Employee line
+    doc.line(14, sigY + 17, 70, sigY + 17);
+    doc.line(pageWidth - 70, sigY + 17, pageWidth - 14, sigY + 17);
 
-    doc.save(`Payslip_${t.employee?.user?.lastname}_${t.monthYear}.pdf`);
+    // MODE LOGIC
+    if (mode === 'view') {
+      return doc.output('bloburl');
+    } else {
+      doc.save(`Payslip_${t.employee?.user?.lastname}_${t.monthYear}.pdf`);
+      return null;
+    }
   } catch (err) {
     console.error("PDF Error:", err);
     alert("Check console for error details.");
+    return null;
   }
 };

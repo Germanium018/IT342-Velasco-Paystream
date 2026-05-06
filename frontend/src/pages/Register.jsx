@@ -134,26 +134,6 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="form-group">
-              <label>Account Role</label>
-              <div className="input-wrapper">
-                <select 
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <option value="Employee">Employee</option>
-                  <option value="Admin">Admin</option>
-                </select>
-                <ChevronDown 
-                  className="eye-icon" 
-                  size={18} 
-                  style={{ pointerEvents: 'none', color: '#94a3b8' }} 
-                />
-              </div>
-            </div>
-
             <button type="submit" className="btn-primary" style={{ marginTop: '10px' }}>
               Sign Up
             </button>

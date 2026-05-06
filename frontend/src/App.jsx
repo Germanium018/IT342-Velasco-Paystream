@@ -2,8 +2,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login';
 import Register from './pages/Register'; 
 import AdminDashboard from './pages/AdminDashboard';
+import EmployeeDashboard from './pages/EmployeeDashboard'; // NEW IMPORT
 import PayrollProcessing from './pages/PayrollProcessing';
-import Payslips from './pages/Payslips'; // NEW IMPORT
+import Payslips from './pages/Payslips'; 
 import Rates from './pages/Rates';
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -32,8 +33,8 @@ function App() {
         <Route 
           path="/employee-dashboard" 
           element={
-            <ProtectedRoute allowedRoles={['ROLE_EMPLOYEE', 'ROLE_ADMIN']}>
-              <AdminDashboard />
+            <ProtectedRoute allowedRoles={['ROLE_EMPLOYEE']}>
+              <EmployeeDashboard />
             </ProtectedRoute>
           } 
         />
@@ -47,7 +48,6 @@ function App() {
           } 
         />
 
-        {/* NEW ROUTE FOR PAYSLIP HISTORY */}
         <Route 
           path="/payslips" 
           element={

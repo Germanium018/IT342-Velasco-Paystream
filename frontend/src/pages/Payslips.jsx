@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
-import { Search, Download, Loader2, Calendar, FileText } from 'lucide-react';
+import { Search, Download, Loader2, Calendar, Eye, X } from 'lucide-react';
 import { generatePayslipPDF } from '../utils/generatePayslipPDF';
 
 const Payslips = () => {
   const [transactions, setTransactions] = useState([]);
-  const [rates, setRates] = useState([]); // Needed for PDF multiplier math
+  const [rates, setRates] = useState([]); 
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [viewingPdf, setViewingPdf] = useState(null); // NEW: State for the PDF viewer modal
 
   const getAuthHeader = () => ({
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -39,8 +40,10 @@ const Payslips = () => {
     return fullName.includes(searchTerm.toLowerCase()) || dateLabel.includes(searchTerm.toLowerCase());
   });
 
-  const handleDownloadPDF = (transaction) => {
-    generatePayslipPDF(transaction, rates);
+  // UPDATED: Now handles both 'view' and 'download' modes
+  const handleAction = (transaction, mode) => {
+    const pdfUrl = generatePayslipPDF(transaction, rates, mode);
+    if (mode === 'view') setViewingPdf(pdfUrl);
   };
 
   if (loading) return (
@@ -65,7 +68,7 @@ const Payslips = () => {
             <Search className="input-icon" size={20} />
             <input 
               type="text" 
-              placeholder="Filter by name or month..." 
+              placeholder="          Search staff..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -80,7 +83,7 @@ const Payslips = () => {
                 <th>Employee</th>
                 <th>Period</th>
                 <th>Net Pay</th>
-                <th>Status</th>
+                {/* REMOVED STATUS COLUMN HERE */}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -102,17 +105,26 @@ const Payslips = () => {
                   <td style={{ fontWeight: 700 }}>
                     ₱{Number(t.netPay || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </td>
+                  {/* REMOVED STATUS DATA CELL HERE */}
                   <td>
-                    <span className="status-pill active">{t.transactionStatus}</span>
-                  </td>
-                  <td>
-                    <button 
-                      className="btn-icon" 
-                      onClick={() => handleDownloadPDF(t)}
-                      style={{ color: '#3b82f6' }}
-                    >
-                      <Download size={18} />
-                    </button>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <button 
+                        onClick={() => handleAction(t, 'view')} 
+                        className="btn-icon" 
+                        title="View PDF" 
+                        style={{ color: '#3b82f6' }}
+                      >
+                        <Eye size={18} />
+                      </button>
+                      <button 
+                        onClick={() => handleAction(t, 'download')} 
+                        className="btn-icon" 
+                        title="Download PDF" 
+                        style={{ color: '#10b981' }}
+                      >
+                        <Download size={18} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -120,6 +132,18 @@ const Payslips = () => {
           </table>
         </div>
       </main>
+
+      {/* NEW: PDF VIEWER MODAL */}
+      {viewingPdf && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(15, 23, 42, 0.8)', zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px' }}>
+          <div style={{ width: '100%', maxWidth: '900px', display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+            <button onClick={() => setViewingPdf(null)} style={{ background: '#ef4444', border: 'none', color: 'white', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <X size={18} /> Close Preview
+            </button>
+          </div>
+          <iframe src={viewingPdf} style={{ width: '100%', maxWidth: '900px', height: '100%', borderRadius: '8px', border: 'none', backgroundColor: 'white' }} title="Payslip Preview" />
+        </div>
+      )}
     </div>
   );
 };

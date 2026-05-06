@@ -34,6 +34,7 @@ public class PayrollService {
                 .orElseThrow(() -> new RuntimeException("Rates not set for position: " + emp.getPosition()));
 
         // --- CALCULATION LOGIC ---
+        // Uses the Daily Rate from the PayRates table instead of the monthly salary
         BigDecimal basicPay = request.getWorkingDays().multiply(rates.getBaseRate());
         BigDecimal pay40ft = request.getCount40ft().multiply(rates.getRate40ft());
         BigDecimal pay20ft = request.getCount20ft().multiply(rates.getRate20ft());
@@ -69,14 +70,16 @@ public class PayrollService {
     }
 
     /**
-     * Fetches all payroll transactions for a specific employee.
+     * Fetches all payroll transactions for a specific employee,
+     * sorted so the most recent payslips appear at the top.
      */
     public List<PayrollTransaction> getEmployeeHistory(Long employeeId) {
-        return payrollRepository.findByEmployeeId(employeeId);
+        // Updated to use the sorted repository method
+        return payrollRepository.findByEmployeeIdOrderByProcessedAtDesc(employeeId);
     }
 
     /**
-     * NEW: Fetches the master list of all payroll transactions for all employees,
+     * Fetches the master list of all payroll transactions for all employees,
      * sorted so the most recent payslips appear at the top.
      */
     public List<PayrollTransaction> getAllTransactions() {
