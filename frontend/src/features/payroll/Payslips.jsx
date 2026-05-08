@@ -1,0 +1,151 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Header from '../../common/Header';
+import { Search, Download, Loader2, Calendar, Eye, X } from 'lucide-react';
+import { generatePayslipPDF } from './generatePayslipPDF';
+
+const Payslips = () => {
+  const [transactions, setTransactions] = useState([]);
+  const [rates, setRates] = useState([]); 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [viewingPdf, setViewingPdf] = useState(null); // NEW: State for the PDF viewer modal
+
+  const getAuthHeader = () => ({
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+  });
+
+  const loadData = async () => {
+    try {
+      const [transRes, ratesRes] = await Promise.all([
+        axios.get('http://localhost:8080/api/v1/payroll/all', getAuthHeader()),
+        axios.get('http://localhost:8080/api/v1/rates', getAuthHeader())
+      ]);
+      setTransactions(Array.isArray(transRes.data) ? transRes.data : []);
+      setRates(Array.isArray(ratesRes.data) ? ratesRes.data : []);
+    } catch (error) {
+      console.error("Initialization failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const filteredTransactions = transactions.filter(t => {
+    const fullName = `${t.employee?.user?.firstname || ''} ${t.employee?.user?.lastname || ''}`.toLowerCase();
+    const dateLabel = (t.monthYear || '').toLowerCase();
+    return fullName.includes(searchTerm.toLowerCase()) || dateLabel.includes(searchTerm.toLowerCase());
+  });
+
+  // UPDATED: Now handles both 'view' and 'download' modes
+  const handleAction = (transaction, mode) => {
+    const pdfUrl = generatePayslipPDF(transaction, rates, mode);
+    if (mode === 'view') setViewingPdf(pdfUrl);
+  };
+
+  if (loading) return (
+    <div className="dashboard-container">
+      <Header />
+      <div className="loader-center" style={{ display: 'flex', justifyContent: 'center', padding: '100px' }}>
+        <Loader2 className="animate-spin" size={32} color="#3b82f6" />
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="dashboard-container">
+      <Header />
+      <main className="dashboard-content">
+        <header className="action-header">
+          <div>
+            <h1 style={{ fontSize: '2rem', color: '#0f172a', fontWeight: 700 }}>Generated Payslips</h1>
+            <p style={{ color: '#64748b' }}>Search and download employee records</p>
+          </div>
+          <div className="search-wrapper">
+            <Search className="input-icon" size={20} />
+            <input 
+              type="text" 
+              placeholder="          Search staff..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </header>
+
+        <div className="table-container">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Date Generated</th>
+                <th>Employee</th>
+                <th>Period</th>
+                <th>Net Pay</th>
+                {/* REMOVED STATUS COLUMN HERE */}
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTransactions.map((t) => (
+                <tr key={t.id}>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Calendar size={16} color="#94a3b8" />
+                      {new Date(t.processedAt).toLocaleDateString()}
+                    </div>
+                  </td>
+                  <td>
+                    <span style={{ fontWeight: 600 }}>
+                      {t.employee?.user?.firstname} {t.employee?.user?.lastname}
+                    </span>
+                  </td>
+                  <td>{t.monthYear}</td>
+                  <td style={{ fontWeight: 700 }}>
+                    ₱{Number(t.netPay || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </td>
+                  {/* REMOVED STATUS DATA CELL HERE */}
+                  <td>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <button 
+                        onClick={() => handleAction(t, 'view')} 
+                        className="btn-icon" 
+                        title="View PDF" 
+                        style={{ color: '#3b82f6' }}
+                      >
+                        <Eye size={18} />
+                      </button>
+                      <button 
+                        onClick={() => handleAction(t, 'download')} 
+                        className="btn-icon" 
+                        title="Download PDF" 
+                        style={{ color: '#10b981' }}
+                      >
+                        <Download size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </main>
+
+      {/* NEW: PDF VIEWER MODAL */}
+      {viewingPdf && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(15, 23, 42, 0.8)', zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px' }}>
+          <div style={{ width: '100%', maxWidth: '900px', display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+            <button onClick={() => setViewingPdf(null)} style={{ background: '#ef4444', border: 'none', color: 'white', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <X size={18} /> Close Preview
+            </button>
+          </div>
+          <iframe src={viewingPdf} style={{ width: '100%', maxWidth: '900px', height: '100%', borderRadius: '8px', border: 'none', backgroundColor: 'white' }} title="Payslip Preview" />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Payslips;

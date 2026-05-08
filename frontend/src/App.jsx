@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register'; 
-import AdminDashboard from './pages/AdminDashboard';
-import EmployeeDashboard from './pages/EmployeeDashboard'; // NEW IMPORT
-import PayrollProcessing from './pages/PayrollProcessing';
-import Payslips from './pages/Payslips'; 
-import Rates from './pages/Rates';
-import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
-import ProtectedRoute from './components/ProtectedRoute';
+import Login from './features/auth/Login';
+import Register from './features/auth/Register'; 
+import AdminDashboard from './features/employee/AdminDashboard';
+import EmployeeDashboard from './features/employee/EmployeeDashboard'; 
+import PayrollProcessing from './features/payroll/PayrollProcessing';
+import Payslips from './features/payroll/Payslips'; 
+import Rates from './features/rates/Rates';
+import OAuth2RedirectHandler from './features/auth/OAuth2RedirectHandler';
+import ProtectedRoute from './common/ProtectedRoute';
 import './App.css';
 import './index.css';
 
