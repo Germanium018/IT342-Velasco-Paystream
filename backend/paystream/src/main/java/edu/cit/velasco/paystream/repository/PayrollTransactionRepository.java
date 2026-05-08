@@ -5,8 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PayrollTransactionRepository extends JpaRepository<PayrollTransaction, Long> {
-    List<PayrollTransaction> findByEmployeeId(Long employeeId);
     
-    // NEW: Fetch all records sorted by date (newest first)
+    // FOR EMPLOYEE DASHBOARD: Get personal history, newest first
+    List<PayrollTransaction> findByEmployeeIdOrderByProcessedAtDesc(Long employeeId);
+    
+    // FOR ADMIN VIEW: Get all records, newest first
     List<PayrollTransaction> findAllByOrderByProcessedAtDesc();
 }

@@ -68,25 +68,20 @@ const AdminDashboard = () => {
         <header className="action-header">
           <div>
             <h1 style={{ fontSize: '2rem', color: '#0f172a', fontWeight: 700 }}>Employee Directory</h1>
-            <p style={{ color: '#64748b' }}>Connected to PayStream Live Database</p>
+            <p style={{ color: '#64748b' }}>Manage Employees with Ease</p>
           </div>
           <div style={{ display: 'flex', gap: '16px', flex: 1, justifyContent: 'flex-end' }}>
             <div className="search-wrapper">
               <Search className="input-icon" size={20} />
               <input 
                 type="text" 
-                placeholder="Search staff..." 
+                placeholder="          Search staff..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
         </header>
-
-        <div style={{ backgroundColor: '#eff6ff', padding: '12px 20px', borderRadius: '8px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px', border: '1px solid #bfdbfe', color: '#1e40af', fontSize: '0.9rem' }}>
-          <Info size={18} />
-          <span><strong>System Sync:</strong> Outstanding balances are pulled directly from the employee ledger.</span>
-        </div>
 
         <div className="table-container">
           <table className="data-table">

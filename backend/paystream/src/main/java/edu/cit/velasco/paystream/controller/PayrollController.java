@@ -31,15 +31,18 @@ public class PayrollController {
         }
     }
 
-    // Existing: Get history for a specific employee
+    /**
+     * USED BY: Employee Dashboard
+     * Fetches personal payslip history for the logged-in employee.
+     */
     @GetMapping("/history/{employeeId}")
     public ResponseEntity<List<PayrollTransaction>> getHistory(@PathVariable Long employeeId) {
         return ResponseEntity.ok(payrollService.getEmployeeHistory(employeeId));
     }
 
     /**
-     * STEP 1 FIX: New Endpoint for Phase 2
-     * Fetches all transactions for all employees, sorted by latest first.
+     * USED BY: Admin Payslips Page
+     * Fetches all transactions for all employees.
      */
     @GetMapping("/all")
     public ResponseEntity<List<PayrollTransaction>> getAllHistory() {
