@@ -59,14 +59,11 @@ const Register = () => {
       <main className="auth-content">
         <div className="auth-card">
           <div className="logo-container" style={{ justifyContent: 'center', marginBottom: '24px' }}>
-            <div style={{ backgroundColor: 'var(--secondary-action)', padding: '8px', borderRadius: '8px', display: 'flex' }}>
-              <LayoutDashboard size={24} color="white" />
-            </div>
             <span style={{ fontSize: '1.5rem' }}>PayStream</span>
           </div>
 
           <h1>Create your account</h1>
-          <p className="auth-subtitle">Start managing your streams with PayStream</p>
+          
 
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'flex', gap: '16px', marginBottom: '20px' }}>
@@ -107,7 +104,7 @@ const Register = () => {
                 <input 
                   type="email" 
                   name="email"
-                  placeholder="name@company.com" 
+                  placeholder="Enter your email" 
                   value={formData.email}
                   onChange={handleChange}
                   required 
@@ -122,7 +119,7 @@ const Register = () => {
                 <input 
                   type={showPassword ? "text" : "password"} 
                   name="password"
-                  placeholder="••••••••" 
+                  placeholder="Enter your password" 
                   minLength="8"
                   value={formData.password}
                   onChange={handleChange}
@@ -157,11 +154,8 @@ const Register = () => {
       </main>
 
       <footer className="main-footer">
-        <p>© 2024 PayStream Inc. All rights reserved.</p>
-        <div className="footer-links">
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
-        </div>
+        <p>© 2026 PayStream Inc. All rights reserved.</p>
+        
       </footer>
     </div>
   );

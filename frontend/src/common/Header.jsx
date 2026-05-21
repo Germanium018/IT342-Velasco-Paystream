@@ -68,16 +68,7 @@ const Header = () => {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-        <Bell size={20} style={{ cursor: 'pointer', color: '#94a3b8' }} title="Notifications" />
-        <Settings size={20} style={{ cursor: 'pointer', color: '#94a3b8' }} title="Settings" />
         
-        <div style={{ 
-          width: '36px', height: '36px', borderRadius: '50%', 
-          backgroundColor: '#3b82f6', display: 'flex', 
-          alignItems: 'center', justifyContent: 'center' 
-        }}>
-          <User size={20} />
-        </div>
 
         <button 
           onClick={handleLogout} 

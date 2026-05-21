@@ -1,4 +1,4 @@
-package edu.cit.velasco.paystream
+package edu.cit.velasco.paystream.features.auth
 
 data class UserResponse(
     val id: Long,

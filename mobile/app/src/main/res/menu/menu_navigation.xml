@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_dashboard" android:title="Admin Dashboard" />
+    <item android:id="@+id/nav_payroll" android:title="Payroll Processing" />
+    <item android:id="@+id/nav_payslips" android:title="Generated Payslips" />
+    <item android:id="@+id/nav_rates" android:title="Manage Rates" />
+</menu>

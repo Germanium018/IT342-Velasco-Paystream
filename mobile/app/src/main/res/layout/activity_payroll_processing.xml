@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F9FAFB">
+
+    <include layout="@layout/common_header" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Payroll Processing"
+                android:textColor="#111827"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="👤 Step 1: Select Employee"
+                android:textStyle="bold"
+                android:textColor="#111827"
+                android:textSize="16sp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                app:cardCornerRadius="8dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Active Employee" android:textSize="12sp" android:textColor="#4B5563"/>
+                    <Spinner android:id="@+id/spEmployeeSelector" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📋 Step 2: Adjustment Details"
+                android:textStyle="bold"
+                android:textColor="#111827"
+                android:textSize="16sp"
+                android:layout_marginTop="12dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Working Days" android:textSize="12sp"/>
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/editbox_background" android:gravity="center" android:orientation="horizontal">
+                                <Button android:id="@+id/btnMinusWorkingDays" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="-" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                                <TextView android:id="@+id/tvWorkingDaysCount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="0" android:gravity="center" android:textStyle="bold"/>
+                                <Button android:id="@+id/btnPlusWorkingDays" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="+" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="40 Foot Containers" android:textSize="12sp"/>
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/editbox_background" android:gravity="center" android:orientation="horizontal">
+                                <Button android:id="@+id/btnMinus40ft" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="-" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                                <TextView android:id="@+id/tv40ftCount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="0" android:gravity="center" android:textStyle="bold"/>
+                                <Button android:id="@+id/btnPlus40ft" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="+" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2" android:layout_marginTop="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="20 Foot Containers" android:textSize="12sp"/>
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/editbox_background" android:gravity="center" android:orientation="horizontal">
+                                <Button android:id="@+id/btnMinus20ft" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="-" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                                <TextView android:id="@+id/tv20ftCount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="0" android:gravity="center" android:textStyle="bold"/>
+                                <Button android:id="@+id/btnPlus20ft" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="+" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overtime Hours" android:textSize="12sp"/>
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/editbox_background" android:gravity="center" android:orientation="horizontal">
+                                <Button android:id="@+id/btnMinusOtHours" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="-" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                                <TextView android:id="@+id/tvOtHoursCount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="0" android:gravity="center" android:textStyle="bold"/>
+                                <Button android:id="@+id/btnPlusOtHours" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="+" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2" android:layout_marginTop="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overtime Containers" android:textSize="12sp"/>
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/editbox_background" android:gravity="center" android:orientation="horizontal">
+                                <Button android:id="@+id/btnMinusOtContainers" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="-" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                                <TextView android:id="@+id/tvOtContainersCount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="0" android:gravity="center" android:textStyle="bold"/>
+                                <Button android:id="@+id/btnPlusOtContainers" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="+" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Out of Town" android:textSize="12sp"/>
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/editbox_background" android:gravity="center" android:orientation="horizontal">
+                                <Button android:id="@+id/btnMinusOutOfTown" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="-" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                                <TextView android:id="@+id/tvOutOfTownCount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="0" android:gravity="center" android:textStyle="bold"/>
+                                <Button android:id="@+id/btnPlusOutOfTown" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="+" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2" android:layout_marginTop="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cash Advances" android:textSize="12sp"/>
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/editbox_background" android:gravity="center" android:orientation="horizontal">
+                                <Button android:id="@+id/btnMinusCashAdvance" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="-" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                                <TextView android:id="@+id/tvCashAdvanceCount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="0" android:gravity="center" android:textStyle="bold"/>
+                                <Button android:id="@+id/btnPlusCashAdvance" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="+" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Days of Absence" android:textSize="12sp"/>
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/editbox_background" android:gravity="center" android:orientation="horizontal">
+                                <Button android:id="@+id/btnMinusAbsences" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="-" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                                <TextView android:id="@+id/tvAbsencesCount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="0" android:gravity="center" android:textStyle="bold"/>
+                                <Button android:id="@+id/btnPlusAbsences" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="+" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Other Debts" android:textSize="12sp" android:layout_marginTop="8dp"/>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:background="@android:drawable/editbox_background" android:gravity="center" android:orientation="horizontal">
+                        <Button android:id="@+id/btnMinusOtherDebts" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="-" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                        <TextView android:id="@+id/tvOtherDebtsCount" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="0" android:gravity="center" android:textStyle="bold"/>
+                        <Button android:id="@+id/btnPlusOtherDebts" android:layout_width="48dp" android:layout_height="48dp" android:padding="0dp" android:insetTop="0dp" android:insetBottom="0dp" android:text="+" android:backgroundTint="#FFFFFF" android:textColor="#111827"/>
+                    </LinearLayout>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Deductions" android:textStyle="bold" android:layout_marginTop="16dp" android:layout_marginBottom="4dp"/>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <CheckBox android:id="@+id/cbSss" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SSS" android:checked="true"/>
+                        <CheckBox android:id="@+id/cbPhilhealth" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PhilHealth" android:checked="true" android:layout_marginHorizontal="12dp"/>
+                        <CheckBox android:id="@+id/cbPagibig" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PagIBIG" android:checked="true"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#0F172A">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Calculation Preview 🧮" android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="16sp" android:layout_marginBottom="12dp"/>
+
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Base Earnings" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/previewBase" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="13sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="40ft" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/preview40ft" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="13sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="20ft" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/preview20ft" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="13sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overtime Hours" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/previewOtHours" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="13sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overtime Container" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/previewOtContainers" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="13sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Out of Town" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/previewOutTown" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="₱0.00" android:textColor="#FFFFFF" android:textSize="13sp"/>
+                    </RelativeLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#334155" android:layout_marginVertical="8dp"/>
+
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gross Pay" android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="14sp"/>
+                        <TextView android:id="@+id/previewGrossPay" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="₱0.00" android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="14sp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SSS" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/previewSss" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="-₱0.00" android:textColor="#F87171" android:textSize="13sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PhilHealth" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/previewPhilhealth" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="-₱0.00" android:textColor="#F87171" android:textSize="13sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PagIBIG" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/previewPagibig" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="-₱0.00" android:textColor="#F87171" android:textSize="13sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Absences" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/previewAbsences" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="-₱0.00" android:textColor="#F87171" android:textSize="13sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cash Advances" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/previewAdvances" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="-₱0.00" android:textColor="#F87171" android:textSize="13sp"/>
+                    </RelativeLayout>
+                    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Other Debts" android:textColor="#94A3B8" android:textSize="13sp"/>
+                        <TextView android:id="@+id/previewOtherDebts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="-₱0.00" android:textColor="#F87171" android:textSize="13sp"/>
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="#1E293B"
+                        android:gravity="center"
+                        android:layout_marginTop="12dp"
+                        android:padding="12dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NET TAKE HOME PAY" android:textColor="#94A3B8" android:textSize="11sp" android:textStyle="bold"/>
+                        <TextView android:id="@+id/tvNetTakeHomePay" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₱0.00" android:textColor="#34D399" android:textSize="24sp" android:textStyle="bold" android:layout_marginTop="2dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🟢 LIVE SYNC ACTIVE" android:textColor="#34D399" android:textSize="10sp" android:layout_marginTop="4dp" android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnGeneratePayslip"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:backgroundTint="#10B981"
+                        android:text="GENERATE PAYSLIP"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

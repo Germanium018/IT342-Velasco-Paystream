@@ -7,6 +7,7 @@ import edu.cit.velasco.paystream.features.rates.PayRatesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -20,19 +21,18 @@ public class PayrollService {
 
     /**
      * Processes a payroll transaction, calculates net pay, 
-     * and updates the employee's outstanding debt balance.
+     * locks historical snapshots, and updates the employee's outstanding debt balance.
      */
     @Transactional
     public PayrollTransaction processPayroll(PayrollTransaction request) {
-        // 1. Fetch Employee
+        // 1. Fetch Employee and Rates
         Employee emp = employeeRepository.findById(request.getEmployee().getId())
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
-        
+
         PayRates rates = payRatesRepository.findById(emp.getPosition())
                 .orElseThrow(() -> new RuntimeException("Rates not set for position: " + emp.getPosition()));
 
         // --- CALCULATION LOGIC ---
-        // Uses the Daily Rate from the PayRates table instead of the monthly salary
         BigDecimal basicPay = request.getWorkingDays().multiply(rates.getBaseRate());
         BigDecimal pay40ft = request.getCount40ft().multiply(rates.getRate40ft());
         BigDecimal pay20ft = request.getCount20ft().multiply(rates.getRate20ft());
@@ -50,19 +50,48 @@ public class PayrollService {
                 .add(request.getCashAdvance())
                 .add(request.getOtherDebts());
 
+        // Calculates Net Pay (Can be negative!)
         BigDecimal netPay = grossPay.subtract(totalDeductions);
 
-        // --- DEBT UPDATE LOGIC ---
-        if (emp.getDebt() != null && request.getOtherDebts().compareTo(BigDecimal.ZERO) > 0) {
-            BigDecimal remainingDebt = emp.getDebt().subtract(request.getOtherDebts());
-            emp.setDebt(remainingDebt);
-            employeeRepository.save(emp); 
+        // --- UPGRADED DEBT UPDATE LOGIC (Shortfall Rollover) ---
+        BigDecimal currentDebt = emp.getDebt() != null ? emp.getDebt() : BigDecimal.ZERO;
+        
+        // Step A: Subtract any normal "Other Debts" repayment the admin entered on this payslip
+        if (request.getOtherDebts().compareTo(BigDecimal.ZERO) > 0) {
+            currentDebt = currentDebt.subtract(request.getOtherDebts());
         }
+
+        // Step B: If the payslip is negative, add the shortfall to their outstanding debt
+        if (netPay.compareTo(BigDecimal.ZERO) < 0) {
+            BigDecimal shortfall = netPay.abs(); // Converts -700 into a positive 700
+            currentDebt = currentDebt.add(shortfall); 
+        }
+
+        // Save the final calculated debt back to the employee profile
+        emp.setDebt(currentDebt);
+        employeeRepository.save(emp); 
 
         // 2. Finalize Transaction Data
         request.setEmployee(emp);
         request.setNetPay(netPay);
         request.setTransactionStatus("PAID");
+
+        // --- Save the Rate & Position Snapshots permanently ---
+        request.setPositionAtTime(emp.getPosition());
+        request.setRateBase(rates.getBaseRate());
+        request.setRate40ft(rates.getRate40ft());
+        request.setRate20ft(rates.getRate20ft());
+        request.setRateOtHour(rates.getRateOtHour());
+        request.setRateOtContainer(rates.getRateOtContainer());
+
+        // --- Save the Calculated Earnings permanently ---
+        request.setPayBase(basicPay);
+        request.setPay40ft(pay40ft);
+        request.setPay20ft(pay20ft);
+        request.setPayOtHour(payOtHours);
+        request.setPayOtContainer(payOtContainers);
+        request.setGrossPay(grossPay);
+        request.setAbsenceDeductionAmount(absenceDeduction);
 
         return payrollRepository.save(request);
     }
@@ -72,7 +101,6 @@ public class PayrollService {
      * sorted so the most recent payslips appear at the top.
      */
     public List<PayrollTransaction> getEmployeeHistory(Long employeeId) {
-        // Updated to use the sorted repository method
         return payrollRepository.findByEmployeeIdOrderByProcessedAtDesc(employeeId);
     }
 

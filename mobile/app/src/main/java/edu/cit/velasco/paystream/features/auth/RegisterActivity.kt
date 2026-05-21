@@ -1,11 +1,17 @@
-package edu.cit.velasco.paystream
+package edu.cit.velasco.paystream.features.auth
 
 import android.os.Bundle
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+import edu.cit.velasco.paystream.R
+import edu.cit.velasco.paystream.core.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,13 +32,13 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         // 1. Get references to UI elements
-        val etFirstName = findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etFirstName)
-        val etLastName = findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etLastName)
-        val etEmail = findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etEmail)
-        val etPassword = findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etPassword)
-        val btnSignUp = findViewById<com.google.android.material.button.MaterialButton>(R.id.btnSignUp)
-        val btnBack = findViewById<android.widget.ImageButton>(R.id.btnBack)
-        val tvLoginLink = findViewById<android.widget.TextView>(R.id.tvLoginLink)
+        val etFirstName = findViewById<TextInputEditText>(R.id.etFirstName)
+        val etLastName = findViewById<TextInputEditText>(R.id.etLastName)
+        val etEmail = findViewById<TextInputEditText>(R.id.etEmail)
+        val etPassword = findViewById<TextInputEditText>(R.id.etPassword)
+        val btnSignUp = findViewById<MaterialButton>(R.id.btnSignUp)
+        val btnBack = findViewById<ImageButton>(R.id.btnBack)
+        val tvLoginLink = findViewById<TextView>(R.id.tvLoginLink)
 
         // 2. Navigation: Back to Login screen
         btnBack.setOnClickListener { finish() }

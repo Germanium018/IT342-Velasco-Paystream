@@ -43,20 +43,12 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <header className="auth-header">
-        <div className="logo-container">
-          <div style={{ backgroundColor: '#3B82F6', padding: '6px', borderRadius: '6px', display: 'flex' }}>
-            <LayoutDashboard size={20} color="white" />
-          </div>
-          PayStream
-        </div>
-        <a href="#" className="support-link">Support</a>
-      </header>
+      
 
       <main className="auth-content">
         <div className="auth-card">
-          <h1>Welcome back</h1>
-          <p className="auth-subtitle">Secure access to your business finances</p>
+          <h1>Welcome to PayStream</h1>
+          
 
           <form onSubmit={handleLogin}>
             <div className="form-group">
@@ -65,7 +57,7 @@ const Login = () => {
                 <Mail className="input-icon" size={18} />
                 <input 
                   type="email" 
-                  placeholder="name@company.com" 
+                  placeholder="Enter your email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required 
@@ -74,15 +66,12 @@ const Login = () => {
             </div>
 
             <div className="form-group">
-              <div className="label-row">
-                <label>Password</label>
-                <a href="#" className="forgot-password">Forgot password?</a>
-              </div>
+              
               <div className="input-wrapper">
                 <Lock className="input-icon" size={18} />
                 <input 
                   type={showPassword ? "text" : "password"} 
-                  placeholder="••••••••" 
+                  placeholder="Enter your password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required 
@@ -120,11 +109,8 @@ const Login = () => {
       </main>
 
       <footer className="main-footer">
-        <p>© 2024 PayStream Inc. All rights reserved.</p>
-        <div className="footer-links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-        </div>
+        <p>© 2026 PayStream Inc. All rights reserved.</p>
+        
       </footer>
     </div>
   );

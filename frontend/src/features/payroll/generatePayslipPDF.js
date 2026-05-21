@@ -1,14 +1,12 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-export const generatePayslipPDF = (t, allRates, mode = 'download') => {
+// 🟢 REMOVED: allRates is no longer needed! We trust the backend's locked math.
+export const generatePayslipPDF = (t, mode = 'download') => {
   try {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     
-    // Safety check for rates (Daily Rates from pay_rates table)
-    const rates = allRates.find(r => r.position === t.employee?.position) || {};
-
     // Helper to ensure we are working with clean numbers
     const num = (val) => Number(val) || 0;
 
@@ -27,27 +25,25 @@ export const generatePayslipPDF = (t, allRates, mode = 'download') => {
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(15, 23, 42);
-    doc.text(`${t.employee?.user?.firstname} ${t.employee?.user?.lastname} - ${t.employee?.position}`, 14, 42);
+    
+    // 🟢 THE FIX: Extract historical position snapshot with fallback logic
+    const displayPosition = t.positionAtTime || t.employee?.position || '';
+    doc.text(`${t.employee?.user?.firstname || 'Unknown'} ${t.employee?.user?.lastname || ''} - ${displayPosition.toUpperCase()}`, 14, 42);
 
-    // 3. EARNINGS (Hide if 0)
+    // 3. EARNINGS (Using permanently locked historical data)
     const earnings = [];
     
-    // Using rates.baseRate (Daily Rate) instead of baseSalary (Monthly Salary)
-    const dailyRate = num(rates.baseRate); 
-
-    const addEarning = (label, count, rate) => {
-      const total = num(count) * num(rate);
-      if (total > 0) {
-        // Using "Php" to avoid encoding errors
-        earnings.push([`${label} (${num(count)} x Php ${num(rate).toLocaleString()})`, `Php ${total.toLocaleString()}`]);
+    const addLockedEarning = (label, count, rate, totalAmount) => {
+      if (num(count) > 0) {
+        earnings.push([`${label} (${num(count)} x Php ${num(rate).toLocaleString()})`, `Php ${num(totalAmount).toLocaleString()}`]);
       }
     };
 
-    addEarning("Base", t.workingDays, dailyRate);
-    addEarning("40ft Container", t.count40ft, rates.rate40ft);
-    addEarning("20ft Container", t.count20ft, rates.rate20ft);
-    addEarning("Overtime Hours", t.overtimeHours, rates.rateOtHour);
-    addEarning("Overtime Container", t.otContainerCount, rates.rateOtContainer);
+    addLockedEarning("Base", t.workingDays, t.rateBase, t.payBase);
+    addLockedEarning("40ft Container", t.count40ft, t.rate40ft, t.pay40ft);
+    addLockedEarning("20ft Container", t.count20ft, t.rate20ft, t.pay20ft);
+    addLockedEarning("Overtime Hours", t.overtimeHours, t.rateOtHour, t.payOtHour);
+    addLockedEarning("Overtime Container", t.otContainerCount, t.rateOtContainer, t.payOtContainer);
     
     if (num(t.outOfTownTrips) > 0) {
       earnings.push(["Out of Town", `Php ${num(t.outOfTownTrips).toLocaleString()}`]);
@@ -61,17 +57,20 @@ export const generatePayslipPDF = (t, allRates, mode = 'download') => {
       columnStyles: { 1: { halign: 'right' } }
     });
 
-    // 4. DEDUCTIONS (Hide if 0)
+    // 4. DEDUCTIONS
     let currentY = doc.lastAutoTable.finalY + 12;
     const deductions = [];
-    if (num(t.sssDeduction) > 0) deductions.push(["SSS", `- Php ${num(t.sssDeduction).toLocaleString()}`]);
-    if (num(t.philhealthDeduction) > 0) deductions.push(["PhilHealth", `- Php ${num(t.philhealthDeduction).toLocaleString()}`]);
-    if (num(t.pagibigDeduction) > 0) deductions.push(["PagIBIG", `- Php ${num(t.pagibigDeduction).toLocaleString()}`]);
+    
     if (num(t.absences) > 0) {
-      deductions.push([`Absences (${num(t.absences)} x -Php ${dailyRate.toLocaleString()})`, `- Php ${(num(t.absences) * dailyRate).toLocaleString()}`]);
+      const absRate = num(t.rateBase);
+      const absTotal = num(t.absenceDeductionAmount);
+      deductions.push([`Absences (${num(t.absences)} x -Php ${absRate.toLocaleString()})`, `- Php ${absTotal.toLocaleString()}`]);
     }
     if (num(t.cashAdvance) > 0) deductions.push(["Cash Advance", `- Php ${num(t.cashAdvance).toLocaleString()}`]);
     if (num(t.otherDebts) > 0) deductions.push(["Other Debts", `- Php ${num(t.otherDebts).toLocaleString()}`]);
+    if (num(t.sssDeduction) > 0) deductions.push(["SSS", `- Php ${num(t.sssDeduction).toLocaleString()}`]);
+    if (num(t.philhealthDeduction) > 0) deductions.push(["PhilHealth", `- Php ${num(t.philhealthDeduction).toLocaleString()}`]);
+    if (num(t.pagibigDeduction) > 0) deductions.push(["PagIBIG", `- Php ${num(t.pagibigDeduction).toLocaleString()}`]);
 
     autoTable(doc, {
       startY: currentY,
@@ -104,7 +103,7 @@ export const generatePayslipPDF = (t, allRates, mode = 'download') => {
     doc.setFont("helvetica", "bold");
     doc.setTextColor(15, 23, 42);
     doc.text("Admin", 14, sigY + 15);
-    doc.text(`${t.employee?.user?.firstname} ${t.employee?.user?.lastname}`, pageWidth - 70, sigY + 15);
+    doc.text(`${t.employee?.user?.firstname || ''} ${t.employee?.user?.lastname || ''}`, pageWidth - 70, sigY + 15);
 
     doc.setDrawColor(148, 163, 184);
     doc.line(14, sigY + 17, 70, sigY + 17);
@@ -114,7 +113,7 @@ export const generatePayslipPDF = (t, allRates, mode = 'download') => {
     if (mode === 'view') {
       return doc.output('bloburl');
     } else {
-      doc.save(`Payslip_${t.employee?.user?.lastname}_${t.monthYear}.pdf`);
+      doc.save(`Payslip_${t.employee?.user?.lastname || 'Unknown'}_${t.monthYear}.pdf`);
       return null;
     }
   } catch (err) {

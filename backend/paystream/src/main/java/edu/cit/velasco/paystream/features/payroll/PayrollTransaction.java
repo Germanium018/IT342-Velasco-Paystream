@@ -22,6 +22,9 @@ public class PayrollTransaction {
     @Column(name = "month_year")
     private String monthYear;
 
+    @Column(name = "position_at_time", length = 50)
+    private String positionAtTime;
+
     @Column(name = "working_days", precision = 15, scale = 2)
     private BigDecimal workingDays;
 
@@ -64,6 +67,45 @@ public class PayrollTransaction {
 
     @Column(name = "payment_mode")
     private String paymentMode = "CASH";
+
+    // --- NEW: Rate Snapshots (Locks the multiplier forever) ---
+    @Column(name = "rate_base", precision = 15, scale = 2)
+    private BigDecimal rateBase;
+
+    @Column(name = "rate_40ft", precision = 15, scale = 2)
+    private BigDecimal rate40ft;
+
+    @Column(name = "rate_20ft", precision = 15, scale = 2)
+    private BigDecimal rate20ft;
+
+    @Column(name = "rate_ot_hour", precision = 15, scale = 2)
+    private BigDecimal rateOtHour;
+
+    @Column(name = "rate_ot_container", precision = 15, scale = 2)
+    private BigDecimal rateOtContainer;
+
+    // --- NEW: Calculated Earnings (Locks the math forever) ---
+    @Column(name = "pay_base", precision = 15, scale = 2)
+    private BigDecimal payBase;
+
+    @Column(name = "pay_40ft", precision = 15, scale = 2)
+    private BigDecimal pay40ft;
+
+    @Column(name = "pay_20ft", precision = 15, scale = 2)
+    private BigDecimal pay20ft;
+
+    @Column(name = "pay_ot_hour", precision = 15, scale = 2)
+    private BigDecimal payOtHour;
+
+    @Column(name = "pay_ot_container", precision = 15, scale = 2)
+    private BigDecimal payOtContainer;
+
+    @Column(name = "gross_pay", precision = 15, scale = 2)
+    private BigDecimal grossPay;
+    
+    // Locks the actual money deducted for absences, separate from the 'count' of absences
+    @Column(name = "absence_deduction_amount", precision = 15, scale = 2)
+    private BigDecimal absenceDeductionAmount;
 
     @Column(name = "transaction_status")
     private String transactionStatus; // "PENDING", "PAID"

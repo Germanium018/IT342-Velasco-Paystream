@@ -21,14 +21,7 @@ const HeaderEmployee = ({ firstName }) => {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginRight: '10px' }}>
-          <span style={{ fontSize: '0.9rem', color: '#94a3b8' }}>Welcome, {firstName}</span>
-        </div>
-        <Bell size={20} style={{ cursor: 'pointer', color: '#94a3b8' }} />
         
-        <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <User size={20} />
-        </div>
 
         <button 
           onClick={handleLogout} 

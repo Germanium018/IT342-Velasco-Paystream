@@ -70,16 +70,50 @@ const AdminDashboard = () => {
             <h1 style={{ fontSize: '2rem', color: '#0f172a', fontWeight: 700 }}>Employee Directory</h1>
             <p style={{ color: '#64748b' }}>Manage Employees with Ease</p>
           </div>
+          
           <div style={{ display: 'flex', gap: '16px', flex: 1, justifyContent: 'flex-end' }}>
-            <div className="search-wrapper">
-              <Search className="input-icon" size={20} />
+            
+            {/* 🟢 NEW, BIGGER, BETTER SEARCH BAR */}
+            <div style={{ position: 'relative', width: '320px' }}>
+              
+              {/* The Icon (Pinned to the left) */}
+              <div style={{ 
+                position: 'absolute', 
+                left: '14px', 
+                top: '50%', 
+                transform: 'translateY(-50%)', 
+                color: '#94a3b8', 
+                pointerEvents: 'none',
+                display: 'flex',
+                alignItems: 'center'
+              }}>
+                <Search size={20} />
+              </div>
+
+              {/* The Input Field */}
               <input 
                 type="text" 
-                placeholder="          Search staff..." 
+                placeholder="Search staff..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '12px 16px 12px 42px', // The 42px on the left makes room for the icon!
+                  fontSize: '1rem',
+                  color: '#334155',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '8px',
+                  outline: 'none',
+                  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                  transition: 'border-color 0.2s ease'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
+                onBlur={(e) => e.target.style.borderColor = '#cbd5e1'}
               />
             </div>
+            {/* 🟢 END OF SEARCH BAR */}
+
           </div>
         </header>
 
@@ -99,7 +133,7 @@ const AdminDashboard = () => {
                 <tr key={emp.id}>
                   <td>
                     <span style={{ fontWeight: 600 }}>{emp.user?.firstname} {emp.user?.lastname}</span>
-                    <span className="employee-id">ID: EMP-{emp.id}</span>
+                    
                   </td>
                   <td>{emp.position || 'UNASSIGNED'}</td>
                   <td style={{ fontWeight: 700, color: emp.debt > 0 ? '#ef4444' : '#10b981' }}>

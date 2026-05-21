@@ -1,13 +1,20 @@
-package edu.cit.velasco.paystream
+package edu.cit.velasco.paystream.features.auth
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import edu.cit.velasco.paystream.databinding.ActivityLoginBinding // See note below
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+import edu.cit.velasco.paystream.R
+import edu.cit.velasco.paystream.core.RetrofitClient
+import edu.cit.velasco.paystream.features.employee.AdminDashboardActivity
+import edu.cit.velasco.paystream.features.employee.EmployeeDashboardActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,10 +34,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // 1. Get references to your UI elements
-        val etEmail = findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etEmail)
-        val etPassword = findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etPassword)
-        val btnSignIn = findViewById<com.google.android.material.button.MaterialButton>(R.id.btnSignIn)
-        val tvRegisterLink = findViewById<android.widget.TextView>(R.id.tvRegisterLink)
+        val etEmail = findViewById<TextInputEditText>(R.id.etEmail)
+        val etPassword = findViewById<TextInputEditText>(R.id.etPassword)
+        val btnSignIn = findViewById<MaterialButton>(R.id.btnSignIn)
+        val tvRegisterLink = findViewById<TextView>(R.id.tvRegisterLink)
 
         // 2. Logic to switch to the Register Screen
         tvRegisterLink.setOnClickListener {
@@ -55,9 +62,28 @@ class LoginActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                     if (response.isSuccessful && response.body()?.success == true) {
                         val user = response.body()?.user
+                        val token = response.body()?.token // Grab the real JWT from the response
+
+                        // 🟢 SAVE TO LOCAL STORAGE (SharedPreferences)
+                        val sharedPreferences = getSharedPreferences("PayStreamPrefs", Context.MODE_PRIVATE)
+                        sharedPreferences.edit()
+                            .putString("JWT_TOKEN", token)
+                            .putLong("USER_ID", user?.id ?: -1L) // 🟢 Saves the ID!
+                            .putString("FIRST_NAME", user?.firstname ?: "Employee") // 🟢 Saves the Name!
+                            .apply()
+
                         Toast.makeText(this@LoginActivity, "Welcome, ${user?.firstname}!", Toast.LENGTH_LONG).show()
 
-                        // TODO: Navigate to Dashboard screen here
+                        // 🟢 ROLE-BASED ROUTING FIX
+                        val intent = if (user?.role == "ROLE_ADMIN") {
+                            Intent(this@LoginActivity, AdminDashboardActivity::class.java)
+                        } else {
+                            Intent(this@LoginActivity, EmployeeDashboardActivity::class.java)
+                        }
+
+                        startActivity(intent)
+                        finish()
+
                     } else {
                         Toast.makeText(this@LoginActivity, "Invalid Credentials", Toast.LENGTH_SHORT).show()
                     }

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Profile &amp; Debt"
+        android:textColor="#111827"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Staff Name"
+        android:textSize="12sp"
+        android:textColor="#6B7280"/>
+    <EditText
+        android:id="@+id/etStaffName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:paddingHorizontal="12dp"
+        android:enabled="false"
+        android:hint="Staff Name"
+        android:layout_marginBottom="12dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Outstanding Balance / Debt (Php)"
+        android:textSize="12sp"
+        android:textColor="#6B7280"/>
+    <EditText
+        android:id="@+id/etDebt"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:paddingHorizontal="12dp"
+        android:inputType="numberDecimal"
+        android:hint="Outstanding Debt"
+        android:layout_marginBottom="12dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position"
+        android:textSize="12sp"
+        android:textColor="#6B7280"/>
+    <Spinner
+        android:id="@+id/spinnerPosition"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="12dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Account Status"
+        android:textSize="12sp"
+        android:textColor="#6B7280"/>
+    <Spinner
+        android:id="@+id/spinnerStatus"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:layout_marginBottom="24dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="#4B5563"
+            android:backgroundTint="#F3F4F6"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btnUpdate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Update Profile"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#3B82F6"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+</LinearLayout>

@@ -7,9 +7,8 @@ import { generatePayslipPDF } from '../payroll/generatePayslipPDF';
 const EmployeeDashboard = () => {
   const [profile, setProfile] = useState(null);
   const [history, setHistory] = useState([]);
-  const [rates, setRates] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [viewingPdf, setViewingPdf] = useState(null); // Stores the PDF URL for the modal
+  const [viewingPdf, setViewingPdf] = useState(null);
 
   const user = JSON.parse(localStorage.getItem('user'));
   const getAuthHeader = () => ({ headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
@@ -17,19 +16,13 @@ const EmployeeDashboard = () => {
   useEffect(() => {
     const fetchPersonalData = async () => {
       try {
-        // 1. Get Employee Profile (for debt & ID)
         const profileRes = await axios.get(`http://localhost:8080/api/v1/employees/me/${user.id}`, getAuthHeader());
         const empData = profileRes.data;
         setProfile(empData);
 
-        // 2. Get Rates & Personal Payroll History in parallel
-        const [historyRes, ratesRes] = await Promise.all([
-          axios.get(`http://localhost:8080/api/v1/payroll/history/${empData.id}`, getAuthHeader()),
-          axios.get('http://localhost:8080/api/v1/rates', getAuthHeader())
-        ]);
-        
+        // 🟢 REMOVED: Only fetching history now, no longer fetching rates table
+        const historyRes = await axios.get(`http://localhost:8080/api/v1/payroll/history/${empData.id}`, getAuthHeader());
         setHistory(historyRes.data);
-        setRates(ratesRes.data);
       } catch (err) {
         console.error("Dashboard Load Error:", err);
       } finally {
@@ -37,10 +30,11 @@ const EmployeeDashboard = () => {
       }
     };
     fetchPersonalData();
-  }, []);
+  }, [user.id]);
 
   const handleAction = (transaction, mode) => {
-    const pdfUrl = generatePayslipPDF(transaction, rates, mode);
+    // 🟢 REMOVED: rates parameter removed
+    const pdfUrl = generatePayslipPDF(transaction, mode);
     if (mode === 'view') setViewingPdf(pdfUrl);
   };
 
@@ -54,7 +48,7 @@ const EmployeeDashboard = () => {
         <header className="action-header" style={{ marginBottom: '40px' }}>
           <div>
             <h1 style={{ fontSize: '2rem', fontWeight: 700 }}>Welcome back, {user.firstname}!</h1>
-            <p style={{ color: '#64748b' }}>Manage your payslips and monitor your balance</p>
+            
           </div>
           
           <div style={{ backgroundColor: 'white', padding: '16px 24px', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -104,7 +98,6 @@ const EmployeeDashboard = () => {
         </div>
       </main>
 
-      {/* PDF VIEWER MODAL */}
       {viewingPdf && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(15, 23, 42, 0.8)', zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px' }}>
           <div style={{ width: '100%', maxWidth: '900px', display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>

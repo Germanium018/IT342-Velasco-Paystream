@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F9FAFB">
+
+    <include layout="@layout/common_header" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rate Management"
+                android:textColor="#111827"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Driver Configuration"
+                        android:textColor="#6366F1"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Base Salary Rate" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etDriverBase" android:layout_width="match_parent" android:layout_height="48dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="40ftr Container Rate" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etDriver40ft" android:layout_width="match_parent" android:layout_height="48dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2" android:layout_marginTop="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="20ftr Container Rate" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etDriver20ft" android:layout_width="match_parent" android:layout_height="48dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overtime Pay (Hour)" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etDriverOtHour" android:layout_width="match_parent" android:layout_height="48dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overtime Container Rate" android:textSize="12sp" android:layout_marginTop="8dp"/>
+                    <EditText android:id="@+id/etDriverOtContainer" android:layout_width="180dp" android:layout_height="48dp" android:inputType="numberDecimal" android:text="0"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E7EB" android:layout_marginVertical="12dp"/>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🛡 Statutory Deductions (Standard)" android:textStyle="bold" android:textSize="14sp" android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SSS" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etDriverSss" android:layout_width="match_parent" android:layout_height="48dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PhilHealth" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etDriverPhilhealth" android:layout_width="match_parent" android:layout_height="48dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pag-IBIG" android:textSize="12sp" android:layout_marginTop="8dp"/>
+                    <EditText android:id="@+id/etDriverPagibig" android:layout_width="180dp" android:layout_height="48dp" android:inputType="numberDecimal" android:text="0"/>
+
+                    <Button
+                        android:id="@+id/btnSaveDriver"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:backgroundTint="#4F46E5"
+                        android:text="💾 Save Driver Rates"
+                        android:textColor="#FFFFFF"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Helper Configuration"
+                        android:textColor="#6366F1"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Base Salary Rate" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etHelperBase" android:layout_width="match_parent" android:layout_height="45dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="40ftr Container Rate" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etHelper40ft" android:layout_width="match_parent" android:layout_height="45dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2" android:layout_marginTop="8dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="20ftr Container Rate" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etHelper20ft" android:layout_width="match_parent" android:layout_height="45dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overtime Pay (Hour)" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etHelperOtHour" android:layout_width="match_parent" android:layout_height="45dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Overtime Container Rate" android:textSize="12sp" android:layout_marginTop="8dp"/>
+                    <EditText android:id="@+id/etHelperOtContainer" android:layout_width="180dp" android:layout_height="45dp" android:inputType="numberDecimal" android:text="0"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E7EB" android:layout_marginVertical="12dp"/>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🛡 Statutory Deductions (Standard)" android:textStyle="bold" android:textSize="14sp" android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="2">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SSS" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etHelperSss" android:layout_width="match_parent" android:layout_height="45dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="4dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PhilHealth" android:textSize="12sp"/>
+                            <EditText android:id="@+id/etHelperPhilhealth" android:layout_width="match_parent" android:layout_height="45dp" android:inputType="numberDecimal" android:text="0"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pag-IBIG" android:textSize="12sp" android:layout_marginTop="8dp"/>
+                    <EditText android:id="@+id/etHelperPagibig" android:layout_width="180dp" android:layout_height="45dp" android:inputType="numberDecimal" android:text="0"/>
+
+                    <Button
+                        android:id="@+id/btnSaveHelper"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:backgroundTint="#4F46E5"
+                        android:text="💾 Save Helper Rates"
+                        android:textColor="#FFFFFF"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

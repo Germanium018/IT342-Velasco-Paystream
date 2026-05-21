@@ -6,10 +6,9 @@ import { generatePayslipPDF } from './generatePayslipPDF';
 
 const Payslips = () => {
   const [transactions, setTransactions] = useState([]);
-  const [rates, setRates] = useState([]); 
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
-  const [viewingPdf, setViewingPdf] = useState(null); // NEW: State for the PDF viewer modal
+  const [viewingPdf, setViewingPdf] = useState(null);
 
   const getAuthHeader = () => ({
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -17,12 +16,9 @@ const Payslips = () => {
 
   const loadData = async () => {
     try {
-      const [transRes, ratesRes] = await Promise.all([
-        axios.get('http://localhost:8080/api/v1/payroll/all', getAuthHeader()),
-        axios.get('http://localhost:8080/api/v1/rates', getAuthHeader())
-      ]);
+      // 🟢 REMOVED: The rates API call is gone! 
+      const transRes = await axios.get('http://localhost:8080/api/v1/payroll/all', getAuthHeader());
       setTransactions(Array.isArray(transRes.data) ? transRes.data : []);
-      setRates(Array.isArray(ratesRes.data) ? ratesRes.data : []);
     } catch (error) {
       console.error("Initialization failed:", error);
     } finally {
@@ -40,9 +36,9 @@ const Payslips = () => {
     return fullName.includes(searchTerm.toLowerCase()) || dateLabel.includes(searchTerm.toLowerCase());
   });
 
-  // UPDATED: Now handles both 'view' and 'download' modes
   const handleAction = (transaction, mode) => {
-    const pdfUrl = generatePayslipPDF(transaction, rates, mode);
+    // 🟢 REMOVED: We no longer pass `rates` to the PDF generator
+    const pdfUrl = generatePayslipPDF(transaction, mode);
     if (mode === 'view') setViewingPdf(pdfUrl);
   };
 
@@ -61,17 +57,53 @@ const Payslips = () => {
       <main className="dashboard-content">
         <header className="action-header">
           <div>
-            <h1 style={{ fontSize: '2rem', color: '#0f172a', fontWeight: 700 }}>Generated Payslips</h1>
-            <p style={{ color: '#64748b' }}>Search and download employee records</p>
+            <h1 style={{ fontSize: '2rem', color: '#0f172a', fontWeight: 700 }}>Employee Directory</h1>
+            <p style={{ color: '#64748b' }}>Manage Employees with Ease</p>
           </div>
-          <div className="search-wrapper">
-            <Search className="input-icon" size={20} />
-            <input 
-              type="text" 
-              placeholder="          Search staff..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          
+          <div style={{ display: 'flex', gap: '16px', flex: 1, justifyContent: 'flex-end' }}>
+            
+            {/* 🟢 NEW, BIGGER, BETTER SEARCH BAR */}
+            <div style={{ position: 'relative', width: '320px' }}>
+              
+              {/* The Icon (Pinned to the left) */}
+              <div style={{ 
+                position: 'absolute', 
+                left: '14px', 
+                top: '50%', 
+                transform: 'translateY(-50%)', 
+                color: '#94a3b8', 
+                pointerEvents: 'none',
+                display: 'flex',
+                alignItems: 'center'
+              }}>
+                <Search size={20} />
+              </div>
+
+              {/* The Input Field */}
+              <input 
+                type="text" 
+                placeholder="Search staff..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '12px 16px 12px 42px', // The 42px on the left makes room for the icon!
+                  fontSize: '1rem',
+                  color: '#334155',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '8px',
+                  outline: 'none',
+                  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                  transition: 'border-color 0.2s ease'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
+                onBlur={(e) => e.target.style.borderColor = '#cbd5e1'}
+              />
+            </div>
+            {/* 🟢 END OF SEARCH BAR */}
+
           </div>
         </header>
 
@@ -81,9 +113,8 @@ const Payslips = () => {
               <tr>
                 <th>Date Generated</th>
                 <th>Employee</th>
-                <th>Period</th>
+                
                 <th>Net Pay</th>
-                {/* REMOVED STATUS COLUMN HERE */}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -101,11 +132,10 @@ const Payslips = () => {
                       {t.employee?.user?.firstname} {t.employee?.user?.lastname}
                     </span>
                   </td>
-                  <td>{t.monthYear}</td>
+                  
                   <td style={{ fontWeight: 700 }}>
                     ₱{Number(t.netPay || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </td>
-                  {/* REMOVED STATUS DATA CELL HERE */}
                   <td>
                     <div style={{ display: 'flex', gap: '12px' }}>
                       <button 
@@ -133,7 +163,6 @@ const Payslips = () => {
         </div>
       </main>
 
-      {/* NEW: PDF VIEWER MODAL */}
       {viewingPdf && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(15, 23, 42, 0.8)', zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px' }}>
           <div style={{ width: '100%', maxWidth: '900px', display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
